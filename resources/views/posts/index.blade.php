@@ -1,5 +1,7 @@
 <x-app-layout>
 
+    <x-flash-message :message="session('notice')" />
+
 
     <div class="container max-w-7xl mx-auto px-4 md:px-12 pb-3 mt-3">
         <div class="flex flex-wrap -mx-1 lg:-mx-4 mb-4">
