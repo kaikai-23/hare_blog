@@ -52,5 +52,9 @@ class User extends Authenticatable
         //hasmanyは紐付いたデータを返す、1つ目Postモデルの
         return $this->hasMany(Post::class);
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
 }
