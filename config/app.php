@@ -25,7 +25,7 @@ return [
     | services the application utilizes. Set this in your ".env" file.
     |
     */
-
+    
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ja',
 
     /*
     |--------------------------------------------------------------------------
