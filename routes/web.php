@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +19,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/', [PostController::class, 'index'])
+    ->name('root');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+//認証あり
+Route::resource('posts', PostController::class)
+    ->only(['create','store', 'edit','update','destroy'])
+    ->middleware('auth');
 require __DIR__.'/auth.php';
+
+//認証なしで見られる
+Route::resource('posts', PostController::class)
+    ->only(['index','show']);
