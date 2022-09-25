@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
+use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -23,20 +25,40 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Post $post)
     {
-        //
+        return view('comments.create', compact('post'));return view('comments.create', compact('post'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCommentRequest  $request
+     * @param  \App\Http\Requests\CommentRequest  $request
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCommentRequest $request)
+    public function store(CommentRequest $request, Post $post)
     {
-        //
+        $comment = new Comment($request->all());
+        $comment->user_id = $request->user()->id;
+
+        // トランザクション開始
+        DB::beginTransaction();
+        try {
+            // 登録
+            $post->comments()->save($comment);
+
+            // トランザクション終了(成功)
+            DB::commit();
+        } catch (\Exception $e) {
+            // トランザクション終了(失敗)
+            DB::rollback();
+            return back()->withInput()->withErrors($e->getMessage());
+        }
+
+        return redirect()
+            ->route('posts.show', $post)
+            ->with('notice', 'コメントを登録しました');
     }
 
     /**
@@ -64,11 +86,11 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCommentRequest  $request
+     * @param  \App\Http\Requests\CommentRequest  $request
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCommentRequest $request, Comment $comment)
+    public function update(CommentRequest $request, Comment $comment)
     {
         //
     }

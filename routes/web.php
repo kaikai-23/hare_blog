@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CommentController;
 
 
 /*
@@ -35,3 +36,10 @@ require __DIR__.'/auth.php';
 //認証なしで見られる
 Route::resource('posts', PostController::class)
     ->only(['index','show']);
+
+
+Route::resource('posts.comments', CommentController::class)
+    ->only(['create', 'store', 'edit', 'update', 'destroy'])
+    ->middleware('auth');
+
+    require __DIR__.'/auth.php';
